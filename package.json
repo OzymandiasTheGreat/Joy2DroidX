@@ -6,7 +6,7 @@
 		}
 	},
 	"main": "app.js",
-	"description": "NativeScript Application",
+	"description": "Use your Android phone as a Xbox 360 or DualShock 4 gamepad on your Windows or Linux PC. This is the android client.",
 	"license": "SEE LICENSE IN <your-license-filename>",
 	"repository": "<fill-your-repository-here>",
 	"dependencies": {
