@@ -1,0 +1,26 @@
+<Page
+	xmlns="http://www.nativescript.org/tns.xsd"
+	loaded="onPageLoaded" >
+	<Page.actionBar>
+		<ActionBar title="Options"></ActionBar>
+	</Page.actionBar>
+	<StackLayout>
+		<ScrollView>
+			<GridLayout class="modal-grid" rows="*, *, *, *, *, *, *, *, *" colums="auto, *">
+				<Label row="0" col="0" class="header" text="left-stick"></Label>
+				<Label row="1" col="0" class="option-label" text="Fixed center"></Label>
+				<Switch row="1" col="1" class="" id="leftStickFixedCenter" />
+				<Label row="2" col="0" class="option-label" text="Full range"></Label>
+				<Switch row="2" col="1" class="" id="leftStickFullRange" />
+				<StackLayout row="3" col="0" colSpan="2" class="hr-light"></StackLayout>
+				<Label row="4" col="0" class="header" text="right-stick"></Label>
+				<Label row="5" col="0" class="option-label" text="Fixed center"></Label>
+				<Switch row="5" col="1" class="" id="rightStickFixedCenter" />
+				<Label row="6" col="0" class="option-label" text="Full range"></Label>
+				<Switch row="6" col="1" class="" id="rightSwitchFullRange" />
+				<StackLayout row="7" col="0" colSpan="2" class="hr-light"></StackLayout>
+			</GridLayout>
+		</ScrollView>
+		<Button row="8" col="1" colSpan="1" class="pull-right statusBtn" id="closeButton" text="Close"></Button>
+	</StackLayout>
+</Page>

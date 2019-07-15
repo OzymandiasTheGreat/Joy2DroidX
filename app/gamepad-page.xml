@@ -1,0 +1,10 @@
+<Page
+	xmlns="http://schemas.nativescript.org/tns.xsd"
+	actionBarHidden="true"
+	navigatingTo="navigatingTo"
+	class="page" >
+	<AbsoluteLayout
+		loaded="{{ onLoaded }}"
+		layoutChanged="{{ onLayoutChanged }}" >
+	</AbsoluteLayout>
+</Page>

@@ -1,0 +1,11 @@
+{
+	"xml.fileAssociations": [
+		{
+			"systemId": "/home/ozymandias/Projects/Joy2DroidX/schema/tns.xsd",
+			"pattern": "**/**/*.xml"
+		}
+	],
+	"files.exclude": {
+		"schema": true
+	}
+}

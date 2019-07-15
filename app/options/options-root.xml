@@ -1,0 +1,4 @@
+<Frame
+	defaultPage="options/options-page"
+	shownModally="onShownModally" >
+</Frame>

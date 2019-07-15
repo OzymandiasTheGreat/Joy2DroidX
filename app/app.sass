@@ -1,0 +1,135 @@
+﻿@import 'app-variables'
+@import '~nativescript-theme-core/scss/index'
+@import '~nativescript-theme-core/scss/platforms/index.android'
+@import 'options/options-page';
+
+
+.fas
+	font-family: "Font Awesome 5 Free", "fa-solid-900"
+	font-weight: 900
+
+.mainBtn
+	font-size: 24
+	color: $mainButtonNormal
+	// background-color: $stickButton
+	width: 48
+	height: 48
+	padding: 0
+	border-radius: 50%
+	border-width: 3
+	border-color: $mainButtonNormal
+	&:connected
+		color: $mainButtonActive
+		border-color: $mainButtonActive
+
+.stick
+	jv-color: $stickButton
+	jv-background-color: $stickBackground
+	jv-border-color: $stickBorder
+	&.left
+		height: 70%
+		width: 35%
+	&.right
+		height: 50%
+		width: 25%
+
+.dpad
+	// background-image: url('res://dpad')
+	// background-repeat: no-repeat
+	// background-position: 50% 50%
+	// background-size: 85% 85%
+	background-color: $stickBackground
+	// jv-color: $dpadButton
+	height: 35%
+	width: 20%
+	padding: 0
+	border-color: $stickBorder
+	border-width: 3
+	border-radius: 150%
+	// button-size-ratio: 0.35
+	// button-stick-to-border: true
+	.dpadBtn
+		font-size: 24px
+		color: $buttonColor
+		background-color: $stickButton
+		padding: 0
+		&.horizontal
+			width: 35%
+			height: 25%
+		&.vertical
+			width: 25%
+			height: 35%
+		&#up-button
+			border-top-left-radius: 7%
+			border-top-right-radius: 7%
+		&#right-button
+			border-top-right-radius: 7%
+			border-bottom-right-radius: 7%
+		&#down-button
+			border-bottom-right-radius: 7%
+			border-bottom-left-radius: 7%
+		&#left-button
+			border-bottom-left-radius: 7%
+			border-top-left-radius: 7%
+
+.faceGrid
+	height: 50%
+	width: 30%
+	background-color: $stickBackground
+	border-color: $stickBorder
+	border-width: 3
+	border-radius: 150%
+	padding: 7
+
+.faceButton
+	font-size: 33%
+	color: $buttonColor
+	line-height: 100%
+	vertical-align: center
+	height: 99%
+	width: 33%
+	padding: 0
+	border-radius: 100%
+	margin: 3
+	&.yBtn
+		background-color: $yButton
+	&.xBtn
+		background-color: $xButton
+	&.aBtn
+		background-color: $aButton
+	&.bBtn
+		background-color: $bButton
+
+.ctrlBtn
+	font-size: 24
+	color: $buttonColor
+	height: 32
+	width: 48
+	padding: 0
+	border-radius: 50%
+
+.bumper
+	font-size: 18
+	color: $buttonColor
+	background-color: $stickBackground
+	height: 48
+	width: 192
+	padding: 0
+	border-width: 3
+	border-color: $stickBorder
+	border-radius: 5
+
+.trigger
+	font-size: 18
+	color: $buttonColor
+	background-color: $stickBackground
+	height: 96
+	width: 96
+	padding: 0
+	border-width: 5
+	border-color: $stickBorder
+	border-radius: 3
+	&.left
+		border-top-left-radius: 25
+	&.right
+		border-top-right-radius: 25
