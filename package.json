@@ -7,8 +7,8 @@
 	},
 	"main": "app.js",
 	"description": "Use your Android phone as a Xbox 360 or DualShock 4 gamepad on your Windows or Linux PC. This is the android client.",
-	"license": "SEE LICENSE IN <your-license-filename>",
-	"repository": "<fill-your-repository-here>",
+	"license": "GPLv3",
+	"repository": "https://github.com/OzymandiasTheGreat/Joy2DroidX",
 	"dependencies": {
 		"nativescript-barcodescanner": "^3.2.1",
 		"nativescript-socketio": "^3.3.1",
