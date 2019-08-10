@@ -4,6 +4,7 @@
 	navigatingTo="navigatingTo"
 	class="page" >
 	<AbsoluteLayout
+		id="absLayout"
 		loaded="{{ onLoaded }}"
 		layoutChanged="{{ onLayoutChanged }}" >
 	</AbsoluteLayout>

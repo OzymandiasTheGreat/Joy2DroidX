@@ -1,0 +1,69 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Test Android",
+			"type": "shell",
+			"command": "tns",
+			"args": [
+				"run", "android"
+			],
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"isBackground": true
+		},
+		{
+			"label": "Build Android",
+			"type": "shell",
+			"command": "tns",
+			"args": [
+				"build", "android", "--release", "--clean",
+				"--key-store-path", "~/Documents/Dev/ozymandias.jks",
+				"--key-store-password", "'${input:JKSPassword}'",
+				"--key-store-alias", "Joy2DroidX",
+				"--key-store-alias-password", "'${input:AliasPassword}'",
+				"--copy-to", "./build/Joy2DroidX.apk"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
+		}
+	],
+	"inputs": [
+		{
+			"id": "JKSPassword",
+			"description": "Enter Key Store Password",
+			"default": "",
+			"type": "promptString"
+		},
+		{
+			"id": "AliasPassword",
+			"description": "Enter Key Store Alias Password",
+			"default": "",
+			"type": "promptString"
+		}
+	]
+}

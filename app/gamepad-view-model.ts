@@ -13,6 +13,7 @@ import * as platform from "tns-core-modules/platform";
 import { VirtualJoystick, VirtualJoystickEventData } from "nativescript-virtual-joystick";
 import { BarcodeScanner } from "nativescript-barcodescanner";
 import { SocketIO } from "nativescript-socketio";
+import STRINGS from "./strings.json";
 
 
 const OPTIONS = "options/options-root";
@@ -27,6 +28,22 @@ let OPTIONS_OPEN: boolean = false;
 let HIDE_TIME: number = 0;
 
 
+enum GAMEPAD_TYPE {
+	x360 = "Xbox 360",
+	ds4  = "DualShock 4",
+}
+
+
+function getType(): string {
+	return appSettings.getString('gamepad-type', GAMEPAD_TYPE.x360);
+}
+
+
+function setType(gamepadType: GAMEPAD_TYPE) {
+	appSettings.setString('gamepad-type', gamepadType);
+}
+
+
 export class GamepadModel extends Observable {
 	controls: Object = {};
 	exclude: string[] = ["gamepad", "main-button", "up-button", "right-button", "down-button", "left-button", "y-button", "x-button", "a-button", "b-button"];
@@ -36,8 +53,10 @@ export class GamepadModel extends Observable {
 	locked: Object = {};
 	hidden: Set<string> = new Set(JSON.parse(appSettings.getString(HIDDEN, "[]")));
 
-	constructor() {
+	constructor(page: Page) {
 		super();
+
+		this.controls["gamepad"] = <AbsoluteLayout>page.getViewById("absLayout");
 
 		this.controls["main-button"] = new Button();
 		this.controls["main-button"].id = "main-button";
@@ -125,28 +144,28 @@ export class GamepadModel extends Observable {
 		this.controls["y-button"] = new Button();
 		this.controls["y-button"].id = "y-button";
 		this.controls["y-button"].className = "faceButton yBtn vertical";
-		this.controls["y-button"].text = "Y";
+		// this.controls["y-button"].text = "Y";
 		this.controls["face-buttons"].addChild(this.controls["y-button"]);
 		GridLayout.setRow(this.controls["y-button"], 0);
 		GridLayout.setColumn(this.controls["y-button"], 1);
 		this.controls["x-button"] = new Button();
 		this.controls["x-button"].id = "x-button";
 		this.controls["x-button"].className = "faceButton xBtn horizontal";
-		this.controls["x-button"].text = "X";
+		// this.controls["x-button"].text = "X";
 		this.controls["face-buttons"].addChild(this.controls["x-button"]);
 		GridLayout.setRow(this.controls["x-button"], 1);
 		GridLayout.setColumn(this.controls["x-button"], 0);
 		this.controls["b-button"] = new Button();
 		this.controls["b-button"].id = "b-button";
 		this.controls["b-button"].className = "faceButton bBtn horizontal";
-		this.controls["b-button"].text = "B";
+		// this.controls["b-button"].text = "B";
 		this.controls["face-buttons"].addChild(this.controls["b-button"]);
 		GridLayout.setRow(this.controls["b-button"], 1);
 		GridLayout.setColumn(this.controls["b-button"], 2);
 		this.controls["a-button"] = new Button();
 		this.controls["a-button"].id = "a-button";
 		this.controls["a-button"].className = "faceButton aBtn vertical";
-		this.controls["a-button"].text = "A";
+		// this.controls["a-button"].text = "A";
 		this.controls["face-buttons"].addChild(this.controls["a-button"]);
 		GridLayout.setRow(this.controls["a-button"], 2);
 		GridLayout.setColumn(this.controls["a-button"], 1);
@@ -154,26 +173,33 @@ export class GamepadModel extends Observable {
 		this.controls["left-bumper"] = new Button();
 		this.controls["left-bumper"].id = "left-bumper";
 		this.controls["left-bumper"].className = "fas bumper left";
-		this.controls["left-bumper"].text = `LB    ${String.fromCharCode(0xf3c1)}`;
+		// this.controls["left-bumper"].text = `LB    ${String.fromCharCode(0xf3c1)}`;
 		// this.controls["left-bumper"].on(GestureTypes.doubleTap, this.onShoulderDoubleTap, this);
 
 		this.controls["left-trigger"] = new Button();
 		this.controls["left-trigger"].id = "left-trigger";
 		this.controls["left-trigger"].className = "fas trigger left";
-		this.controls["left-trigger"].text = `LT ${String.fromCharCode(0xf3c1)}`;
+		// this.controls["left-trigger"].text = `LT ${String.fromCharCode(0xf3c1)}`;
 		// this.controls["left-trigger"].on(GestureTypes.doubleTap, this.onShoulderDoubleTap, this);
 
 		this.controls["right-bumper"] = new Button();
 		this.controls["right-bumper"].id = "right-bumper";
 		this.controls["right-bumper"].className = "fas bumper right";
-		this.controls["right-bumper"].text = `RB    ${String.fromCharCode(0xf3c1)}`;
+		// this.controls["right-bumper"].text = `RB    ${String.fromCharCode(0xf3c1)}`;
 		// this.controls["right-bumper"].on(GestureTypes.doubleTap, this.onShoulderDoubleTap, this);
 
 		this.controls["right-trigger"] = new Button();
 		this.controls["right-trigger"].id = "right-trigger";
 		this.controls["right-trigger"].className = "fas trigger right";
-		this.controls["right-trigger"].text = `RT ${String.fromCharCode(0xf3c1)}`;
+		// this.controls["right-trigger"].text = `RT ${String.fromCharCode(0xf3c1)}`;
 		// this.controls["right-trigger"].on(GestureTypes.doubleTap, this.onShoulderDoubleTap, this);
+
+		this.controls["gamepad"].addChild(this.controls["main-button"]);
+		for (let [ controlId, control ] of Object.entries(this.controls)) {
+			if (!this.exclude.includes(controlId)) {
+				this.controls["gamepad"].addChild(control);
+			}
+		}
 	}
 
 	onLoaded(loadedData: EventData) {
@@ -209,53 +235,108 @@ export class GamepadModel extends Observable {
 	}
 
 	onLayoutChanged(data: EventData) {
-		this.controls["gamepad"] = <AbsoluteLayout> data.object;
+		this.layout();
+		this.mainEventsOn();
+		this.updateLayout();
+	}
+
+	layout() {
 		const { width, height } = this.controls["gamepad"].getActualSize();
 
-		this.controls["gamepad"].addChild(this.controls["main-button"]);
 		AbsoluteLayout.setTop(this.controls["main-button"], height * 0.15);
 		AbsoluteLayout.setLeft(this.controls["main-button"], (width - 48) / 2);
 
 		for (let [ controlId, control ] of Object.entries(this.controls)) {
 			if (!this.exclude.includes(controlId)) {
-				this.controls["gamepad"].addChild(control);
 				if (controlId === "back-button") {
 					AbsoluteLayout.setTop(control, height * 0.45);
 					AbsoluteLayout.setLeft(control, (width - 48) * 0.4);
 				} else if (controlId === "start-button") {
 					AbsoluteLayout.setTop(control, height * 0.45);
 					AbsoluteLayout.setLeft(control, (width - 48) * 0.6);
-				} else if (controlId === "left-stick") {
-					AbsoluteLayout.setTop(control, height * 0.45);
-					AbsoluteLayout.setLeft(control, -25);
-				} else if (controlId === "dpad") {
-					AbsoluteLayout.setTop(control, height * 0.65);
-					AbsoluteLayout.setLeft(control, width * 0.28);
 				} else if (controlId === "right-stick") {
 					AbsoluteLayout.setTop(control, height * 0.6);
 					AbsoluteLayout.setLeft(control, width * 0.47);
-				} else if (controlId === "face-buttons") {
-					AbsoluteLayout.setTop(control, height * 0.5);
-					AbsoluteLayout.setLeft(control, width * 0.7);
-				} else if (controlId === "left-bumper") {
-					AbsoluteLayout.setTop(control, height * 0.32);
-					AbsoluteLayout.setLeft(control, width * 0.01);
-				} else if (controlId === "left-trigger") {
-					AbsoluteLayout.setTop(control, height * 0.035);
-					AbsoluteLayout.setLeft(control, width * 0.07);
-				} else if (controlId === "right-bumper") {
-					AbsoluteLayout.setTop(control, height * 0.32);
-					AbsoluteLayout.setLeft(control, (width * 0.99) - 192);
-				} else if (controlId === "right-trigger") {
-					AbsoluteLayout.setTop(control, height * 0.035);
-					AbsoluteLayout.setLeft(control, (width * 0.93) - 96);
+				} else {
+					if (getType() === GAMEPAD_TYPE.x360) {
+						control.addPseudoClass("x360");
+						control.deletePseudoClass("ds4");
+						if (controlId === "left-stick") {
+							AbsoluteLayout.setTop(control, height * 0.45);
+							AbsoluteLayout.setLeft(control, -25);
+						} else if (controlId === "dpad") {
+							AbsoluteLayout.setTop(control, height * 0.65);
+							AbsoluteLayout.setLeft(control, width * 0.28);
+						} else if (controlId === "face-buttons") {
+							AbsoluteLayout.setTop(control, height * 0.5);
+							AbsoluteLayout.setLeft(control, width * 0.7);
+							this.controls["y-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.x360].yBtn;
+							this.controls["y-button"].deletePseudoClass("micon");
+							this.controls["x-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.x360].xBtn;
+							this.controls["x-button"].deletePseudoClass("micon");
+							this.controls["b-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.x360].bBtn;
+							this.controls["b-button"].deletePseudoClass("micon");
+							this.controls["a-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.x360].aBtn;
+							this.controls["a-button"].deletePseudoClass("micon");
+						} else if (controlId === "left-bumper") {
+							AbsoluteLayout.setTop(control, height * 0.32);
+							AbsoluteLayout.setLeft(control, width * 0.01);
+							this.controls["left-bumper"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.x360].LB}    ${String.fromCharCode(0xf3c1)}`;
+						} else if (controlId === "left-trigger") {
+							AbsoluteLayout.setTop(control, height * 0.035);
+							AbsoluteLayout.setLeft(control, width * 0.07);
+							this.controls["left-trigger"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.x360].LT} ${String.fromCharCode(0xf3c1)}`;
+						} else if (controlId === "right-bumper") {
+							AbsoluteLayout.setTop(control, height * 0.32);
+							AbsoluteLayout.setLeft(control, (width * 0.99) - 192);
+							this.controls["right-bumper"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.x360].RB}    ${String.fromCharCode(0xf3c1)}`;
+						} else if (controlId === "right-trigger") {
+							AbsoluteLayout.setTop(control, height * 0.035);
+							AbsoluteLayout.setLeft(control, (width * 0.93) - 96);
+							this.controls["right-trigger"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.x360].RT} ${String.fromCharCode(0xf3c1)}`;
+						}
+					} else {
+						control.addPseudoClass("ds4");
+						control.deletePseudoClass("x360");
+						if (controlId === "left-stick") {
+							AbsoluteLayout.setTop(control, height * 0.45);
+							AbsoluteLayout.setLeft(control, width * 0.17);
+						} else if (controlId === "dpad") {
+							AbsoluteLayout.setTop(control, height * 0.55);
+							AbsoluteLayout.setLeft(control, 0);
+						} else if (controlId === "face-buttons") {
+							AbsoluteLayout.setTop(control, height * 0.5);
+							AbsoluteLayout.setLeft(control, width * 0.7);
+							this.controls["y-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.ds4].yBtn;
+							this.controls["y-button"].addPseudoClass("micon");
+							this.controls["x-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.ds4].xBtn;
+							this.controls["x-button"].addPseudoClass("micon");
+							this.controls["b-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.ds4].bBtn;
+							this.controls["b-button"].addPseudoClass("micon");
+							this.controls["a-button"].text = STRINGS.gamepad[GAMEPAD_TYPE.ds4].aBtn;
+							this.controls["a-button"].addPseudoClass("micon");
+						} else if (controlId === "left-bumper") {
+							AbsoluteLayout.setTop(control, height * 0.32);
+							AbsoluteLayout.setLeft(control, width * 0.01);
+							this.controls["left-bumper"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.ds4].LB}    ${String.fromCharCode(0xf3c1)}`;
+						} else if (controlId === "left-trigger") {
+							AbsoluteLayout.setTop(control, height * 0.035);
+							AbsoluteLayout.setLeft(control, width * 0.07);
+							this.controls["left-trigger"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.ds4].LT} ${String.fromCharCode(0xf3c1)}`;
+						} else if (controlId === "right-bumper") {
+							AbsoluteLayout.setTop(control, height * 0.32);
+							AbsoluteLayout.setLeft(control, (width * 0.99) - 192);
+							this.controls["right-bumper"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.ds4].RB}    ${String.fromCharCode(0xf3c1)}`;
+						} else if (controlId === "right-trigger") {
+							AbsoluteLayout.setTop(control, height * 0.035);
+							AbsoluteLayout.setLeft(control, (width * 0.93) - 96);
+							this.controls["right-trigger"].text = `${STRINGS.gamepad[GAMEPAD_TYPE.ds4].RT} ${String.fromCharCode(0xf3c1)}`;
+						}
+					}
 				}
 			}
 		}
 		this.controls["gamepad"].requestLayout();
-
-		this.mainEventsOn();
-		this.updateLayout();
 	}
 
 	mainEventsOn() {
@@ -428,6 +509,8 @@ export class GamepadModel extends Observable {
 	}
 
 	showMenu(data) {
+		const x360: string = "Switch to Xbox 360 mode";
+		const ds4: string = "Switch to DualShock 4 mode";
 		const actions: string[] = [];
 		const option: ActionOptions = {
 			actions,
@@ -435,6 +518,8 @@ export class GamepadModel extends Observable {
 
 		if (CONNECTED) actions.push("Disconnect");
 		else actions.push("Connect");
+		if (getType() === GAMEPAD_TYPE.x360) actions.push(ds4);
+		else actions.push(x360);
 		if (EDITING) actions.push("Save Layout");
 		else actions.push("Edit Layout");
 		actions.push("Options");
@@ -443,6 +528,36 @@ export class GamepadModel extends Observable {
 		action(option).then((item) => {
 			if (item === "Connect") this.promptConnect();
 			else if (item === "Disconnect" && this.sio && this.sio.connected) this.sio.disconnect();
+			else if (item === ds4) {
+				const dpadTranslateX: number = this.controls["dpad"].translateX;
+				const dpadTranslateY: number = this.controls["dpad"].translateY;
+
+				this.controls["dpad"].translateX = this.controls["left-stick"].translateX;
+				this.controls["dpad"].translateY = this.controls["left-stick"].translateY;
+				this.controls["left-stick"].translateX = dpadTranslateX;
+				this.controls["left-stick"].translateY = dpadTranslateY;
+				setType(GAMEPAD_TYPE.ds4);
+				this.layout();
+				this.mainEventsOff();
+				this.saveLayout();
+				this.updateLayout();
+				this.reconnect();
+			}
+			else if (item === x360) {
+				const dpadTranslateX: number = this.controls["dpad"].translateX;
+				const dpadTranslateY: number = this.controls["dpad"].translateY;
+
+				this.controls["dpad"].translateX = this.controls["left-stick"].translateX;
+				this.controls["dpad"].translateY = this.controls["left-stick"].translateY;
+				this.controls["left-stick"].translateX = dpadTranslateX;
+				this.controls["left-stick"].translateY = dpadTranslateY;
+				setType(GAMEPAD_TYPE.x360);
+				this.layout();
+				this.mainEventsOff();
+				this.saveLayout();
+				this.updateLayout();
+				this.reconnect();
+			}
 			else if (item === "Edit Layout") this.editLayout();
 			else if (item === "Save Layout") this.saveLayout();
 			else if (item === "Options") {
@@ -540,10 +655,12 @@ export class GamepadModel extends Observable {
 			forceNew: true,
 		});
 		this.sio.on("connect", () => {
+			const type = getType();
+			const id = type === GAMEPAD_TYPE.x360 ? "x360" : "ds4"
 			CONNECTED = true;
 			this.controls["main-button"].addPseudoClass("connected");
 			appSettings.setString(LAST_CONNECTED, url);
-			this.sio.emit("intro", { device: platform.device.model });
+			this.sio.emit("intro", { device: platform.device.model, id, type });
 		});
 		this.sio.on("disconnect", () => {
 			CONNECTED = false;
@@ -551,6 +668,17 @@ export class GamepadModel extends Observable {
 			this.sio = null;
 		});
 		this.sio.connect();
+	}
+
+	reconnect() {
+		const addr = appSettings.getString(LAST_CONNECTED, null);
+
+		if (this.sio && this.sio.connected) {
+			this.sio.disconnect();
+			if (addr) setTimeout(() => {
+				this.connect(addr);
+			}, 50);
+		}
 	}
 
 	onShoulderDoubleTap(data: GestureEventData) {

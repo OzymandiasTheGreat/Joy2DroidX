@@ -9,11 +9,13 @@
 	font-weight: 900
 
 .mainBtn
-	font-size: 24
+	font-size: 26
+	line-height: 1
+	vertical-align: center
 	color: $mainButtonNormal
 	// background-color: $stickButton
-	width: 48
-	height: 48
+	width: 54
+	height: 54
 	padding: 0
 	border-radius: 50%
 	border-width: 3
@@ -26,12 +28,11 @@
 	jv-color: $stickButton
 	jv-background-color: $stickBackground
 	jv-border-color: $stickBorder
+	height: 50%
+	width: 25%
 	&.left
 		height: 70%
 		width: 35%
-	&.right
-		height: 50%
-		width: 25%
 
 .dpad
 	// background-image: url('res://dpad')
@@ -48,6 +49,9 @@
 	border-radius: 150%
 	// button-size-ratio: 0.35
 	// button-stick-to-border: true
+	// &:ds4
+	// 	height: 50%
+	// 	width: 30%
 	.dpadBtn
 		font-size: 24px
 		color: $buttonColor
@@ -83,6 +87,7 @@
 
 .faceButton
 	font-size: 33%
+	font-weight: 500
 	color: $buttonColor
 	line-height: 100%
 	vertical-align: center
@@ -91,6 +96,13 @@
 	padding: 0
 	border-radius: 100%
 	margin: 3
+	&:micon
+		font-family: "Material Icons", "MaterialIcons-Regular"
+		font-size: 48%
+		font-weight: 400
+		font-style: normal
+		// line-height: 1
+		text-transform: none
 	&.yBtn
 		background-color: $yButton
 	&.xBtn

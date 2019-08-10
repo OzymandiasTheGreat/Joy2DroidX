@@ -13,7 +13,7 @@ import { GamepadModel } from "./gamepad-view-model";
 export function navigatingTo(args: EventData) {
 	const page = <Page>args.object;
 
-	page.bindingContext = new GamepadModel();
+	page.bindingContext = new GamepadModel(page);
 
 	if (app.android) {
 		const window = app.android.startActivity.getWindow();

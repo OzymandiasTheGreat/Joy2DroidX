@@ -1,0 +1,24 @@
+{
+	"gamepad": {
+		"Xbox 360": {
+			"yBtn": "Y",
+			"xBtn": "X",
+			"aBtn": "A",
+			"bBtn": "B",
+			"LB": "LB",
+			"LT": "LT",
+			"RB": "RB",
+			"RT": "RT"
+		},
+		"DualShock 4": {
+			"yBtn": "\ue86b",
+			"xBtn": "\ue836",
+			"aBtn": "\ue14c",
+			"bBtn": "\ue835",
+			"LB": "L1",
+			"LT": "L2",
+			"RB": "R1",
+			"RT": "R2"
+		}
+	}
+}

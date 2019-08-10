@@ -2,7 +2,7 @@
 	"nativescript": {
 		"id": "tk.ozymandias.Joy2DroidX",
 		"tns-android": {
-			"version": "6.0.0"
+			"version": "5.4.0"
 		}
 	},
 	"main": "app.js",
@@ -14,13 +14,13 @@
 		"nativescript-socketio": "^3.3.1",
 		"nativescript-theme-core": "~1.0.4",
 		"nativescript-virtual-joystick": "^0.1.5",
-		"tns-core-modules": "6.0.1"
+		"tns-core-modules": "~5.4.0"
 	},
 	"devDependencies": {
-		"nativescript-dev-webpack": "1.0.1",
-		"tns-platform-declarations": "6.0.1",
-		"node-sass": "4.12.0",
-		"typescript": "3.4.5"
+		"nativescript-dev-sass": "^1.7.0",
+		"nativescript-dev-typescript": "~0.10.0",
+		"nativescript-dev-webpack": "~0.24.0",
+		"tns-platform-declarations": "^5.4.3"
 	},
 	"gitHead": "8c1a4866a66daab09bf5ef8e5a96472687192373",
 	"readme": "NativeScript Application"
