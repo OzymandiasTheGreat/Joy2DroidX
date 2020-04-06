@@ -4,6 +4,12 @@ Use your phone as a virtual gamepad on your PC. Supported modes for gamepad are
 Xbox 360 controller and DualShock 4. Supported platforms for server are Windows
 and Linux.
 
+-------------------
+
+If you find this software useful, [consider becoming a patron](https://www.patreon.com/ozymandias)
+
+-------------------
+
 ### Server
 
 Server can be downloaded [here](https://github.com/OzymandiasTheGreat/Joy2DroidX-server).
