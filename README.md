@@ -1,14 +1,25 @@
 # Joy2DroidX
 
+#### ARCHIVED
+
+I'm sorry to everyone who uses this, but I have completely forgotten about this
+project. You see, I'm not much of a gamer.
+
+Updates and bugfixes are unlikely as I'm no longer working with NativeScript,
+which is what this app is written with.
+
+As I don't have spare time or much of an interest anymore and this needs
+pretty much a complete rewrite, I'm archiving the repo.
+
+I also made the Google Play listing free and it will continue to work for quite
+a while, so enjoy.
+
+--------------------------------------------------------------------------------
+
 Use your phone as a virtual gamepad on your PC. Supported modes for gamepad are
 Xbox 360 controller and DualShock 4. Supported platforms for server are Windows
 and Linux.
 
--------------------
-
-If you find this software useful, [consider becoming a patron](https://www.patreon.com/ozymandias)
-
--------------------
 
 ### Server
 
