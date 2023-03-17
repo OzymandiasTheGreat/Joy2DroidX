@@ -19,7 +19,7 @@
 	"devDependencies": {
 		"nativescript-dev-webpack": "1.0.1",
 		"tns-platform-declarations": "6.0.1",
-		"node-sass": "4.12.0",
+		"node-sass": "4.13.1",
 		"typescript": "3.4.5"
 	},
 	"gitHead": "8c1a4866a66daab09bf5ef8e5a96472687192373",
